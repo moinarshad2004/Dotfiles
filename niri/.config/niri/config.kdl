@@ -154,19 +154,71 @@ layer-rule {
 }
 
 // Application Startup
-//spawn-at-startup "qs" "-c" "noctalia-shell"
+//spawn-at-startup "swaybg" "-i" "/home/moin/Pictures/FavWallpapers/joeyjazz-timeless.jpg"
 //spawn-at-startup "systemd-run" "--user" "--scope" "/usr/lib/polkit-kde-authentication-agent-1"
 //spawn-at-startup "wl-paste" "--watch" "cliphist" "store"
 //spawn-at-startup "nm-applet"
-//spawn-at-startup "swaybg" "-i" "/home/moin/Pictures/FavWallpapers/joeyjazz-timeless.jpg"
+//spawn-at-startup "qs" "-c" "noctalia-shell"
+//spawn-sh-at-startup "XDG_MENU_PREFIX=arch- kbuildsycoca6"
 
 hotkey-overlay {
     skip-at-startup
 }
 
+switch-events {
+    lid-close {
+         spawn "qs" "-c" "noctalia-shell" "ipc" "call" "lockScreen" "lock"
+    }
+}
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
 animations {
+  workspace-switch {
+        spring damping-ratio=1.0 stiffness=1000 epsilon=0.0001
+    }
+
+    window-open {
+        duration-ms 100
+        curve "ease-out-expo"
+    }
+
+    window-close {
+        duration-ms 100
+        curve "ease-out-quad"
+    }
+
+    horizontal-view-movement {
+        spring damping-ratio=1.0 stiffness=1000 epsilon=0.0001
+    }
+
+    window-movement {
+        spring damping-ratio=1.0 stiffness=800 epsilon=0.0001
+    }
+
+    window-resize {
+        spring damping-ratio=1.0 stiffness=800 epsilon=0.0001
+    }
+
+    config-notification-open-close {
+        spring damping-ratio=0.6 stiffness=1000 epsilon=0.001
+    }
+
+    exit-confirmation-open-close {
+        spring damping-ratio=0.6 stiffness=500 epsilon=0.01
+    }
+
+    screenshot-ui-open {
+        duration-ms 200
+        curve "ease-out-quad"
+    }
+
+    overview-open-close {
+        spring damping-ratio=1.0 stiffness=800 epsilon=0.0001
+    }
+
+    recent-windows-close {
+        spring damping-ratio=1.0 stiffness=800 epsilon=0.001
+    }
 }
 
 workspace "browser"
@@ -194,6 +246,7 @@ binds {
     Alt+Space { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
     Mod+L { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "lockScreen" "lock"; }
     Mod+Return { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "sessionMenu" "toggle";}
+    Mod+Escape { spawn "plasma-systemmonitor";}
 
     // Window management----------------------------------------------------------------
     Alt+F4 repeat=false { close-window; }
@@ -239,7 +292,7 @@ binds {
     // Expand upto edges
     Mod+M { maximize-window-to-edges; }
     // Toggle Float
-    Mod+V       { toggle-window-floating; }
+    // Mod+V       { toggle-window-floating; }
     // Toggle tabbed column display mode.
     Mod+W { toggle-column-tabbed-display; }
 
@@ -297,23 +350,5 @@ binds {
 
     XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
     XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
-
-    // Applications such as remote-desktop clients and software KVM switches may
-    // request that niri stops processing the keyboard shortcuts defined here
-    // so they may, for example, forward the key presses as-is to a remote machine.
-    // It's a good idea to bind an escape hatch to toggle the inhibitor,
-    // so a buggy application can't hold your session hostage.
-    //
-    // The allow-inhibiting=false property can be applied to other binds as well,
-    // which ensures niri always processes them, even when an inhibitor is active.
-    Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
-    
-    // Actions to switch layouts.
-    // Note: if you uncomment these, make sure you do NOT have
-    // a matching layout switch hotkey configured in xkb options above.
-    // Having both at once on the same hotkey will break the switching,
-    // since it will switch twice upon pressing the hotkey (once by xkb, once by niri).
-    // Mod+Space       { switch-layout "next"; }
-    // Mod+Shift+Space { switch-layout "prev"; }
 
 }
